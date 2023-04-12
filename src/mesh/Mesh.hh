@@ -7,7 +7,6 @@
   Authors: Ethan Coon (coonet@ornl.gov)
            Julien Loiseau (jloiseau@lanl.gov)
 */
-
 /*
 
 Developer note:
@@ -48,5 +47,4 @@ externally to this library.
 #include "MeshAlgorithms.hh"
 #include "MeshInternals_impl.hh"
 #include "MeshCache_impl.hh"
-
 

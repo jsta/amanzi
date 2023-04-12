@@ -50,7 +50,7 @@ computeCellNodes(const Mesh_type& mesh, const Entity_ID c);
 
 template <class Mesh_type>
 typename Mesh_type::Entity_ID_View
-computeNodeCells(const Mesh_type& mesh, const Entity_ID n);
+computeNodeCells(const Mesh_type& mesh, const Entity_ID n, const Parallel_kind kind);
 
 
 //
@@ -109,5 +109,3 @@ getFaceCentroid(const Mesh_type& mesh, const Entity_ID f);
 } // namespace Impl
 } // namespace AmanziMesh
 } // namespace Amanzi
-
-

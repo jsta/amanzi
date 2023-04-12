@@ -27,7 +27,7 @@ EvaluatorSecondary::EvaluatorSecondary(Teuchos::ParameterList& plist)
     plist_(plist),
     vo_(Keys::cleanPListName(plist.name()), plist)
 {
-  type_ = EvaluatorType::SECONDARY;
+  type_ = Evaluator_kind::SECONDARY;
 
   // process the plist for names and tags of the things this evaluator calculates
   if (plist_.isParameter("names")) {
@@ -201,7 +201,7 @@ EvaluatorSecondary::Update(State& S, const Key& request)
     if (comm != Teuchos::null) {
       int update_l = update;
       int update_g = 0;
-      comm->MaxAll(&update_l, &update_g, 1);
+      Teuchos::reduceAll(*comm, Teuchos::REDUCE_MAX, 1, &update_l, &update_g);
       update |= update_g;
     }
   }
@@ -284,7 +284,7 @@ EvaluatorSecondary::UpdateDerivative(State& S,
     if (comm != Teuchos::null) {
       int update_l = update;
       int update_g = 0;
-      comm->MaxAll(&update_l, &update_g, 1);
+      Teuchos::reduceAll(*comm, Teuchos::REDUCE_MAX, 1, &update_l, &update_g);
       update |= update_g;
     }
   }
@@ -390,5 +390,16 @@ EvaluatorSecondary::EnsureCompatibility_Flags_(State& S)
     S.GetRecordW(keytag.first, keytag.second, keytag.first).set_io_checkpoint(checkpoint_my_key);
   }
 }
+
+
+std::ostream&
+EvaluatorSecondary::writeInfo(std::ostream& os) const
+{
+  for (auto key : my_keys_) os << Keys::getKey(key.first, key.second) << ",";
+  os << "(" << getType() << ") [" << to_string(getKind()) << "]" << std::endl;
+  for (auto dep : dependencies_) os << "  " << Keys::getKey(dep.first, dep.second) << std::endl;
+  return os;
+}
+
 
 } // namespace Amanzi
