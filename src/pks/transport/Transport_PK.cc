@@ -26,6 +26,7 @@
 #include "BCs.hh"
 #include "errors.hh"
 #include "EvaluatorMultiplicativeReciprocal.hh"
+#include "EvaluatorPrimaryDomainFunction.hh" 
 #include "Mesh.hh"
 #include "PDE_Accumulation.hh"
 #include "PDE_Diffusion.hh"
@@ -43,6 +44,7 @@
 #include "TransportBoundaryFunction_Chemistry.hh"
 #include "TransportDomainFunction.hh"
 #include "TransportSourceFunction_Alquimia.hh"
+
 
 namespace Amanzi {
 namespace Transport {
@@ -89,6 +91,8 @@ Transport_PK::Transport_PK(Teuchos::ParameterList& pk_tree,
   nonlinear_solver_list_ = Teuchos::sublist(glist, "nonlinear solvers");
 
   subcycling_ = tp_list_->get<bool>("transport subcycling", true);
+
+  convert_to_field_ = tp_list_->get<bool>("convert to field", false);
 
   // domain name
   domain_ = tp_list_->template get<std::string>("domain name", "domain");
@@ -577,6 +581,10 @@ Transport_PK::Initialize()
 
         src->set_state(S_);
         srcs_.push_back(src);
+        if (convert_to_field_) {
+              auto eval = Teuchos::rcp(new EvaluatorPrimaryDomainFunction(src));
+              S_->SetEvaluator(name, Tags::DEFAULT, eval);        
+            }
 
       } else {
         if (clist.isSublist(name)) {
@@ -594,6 +602,7 @@ Transport_PK::Initialize()
           }
         }
       }
+     
     }
 #ifdef ALQUIMIA_ENABLED
     // -- try geochemical conditions

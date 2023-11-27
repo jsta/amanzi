@@ -235,6 +235,7 @@ and temporal accuracy, and verbosity:
 #include "MultiscaleTransportPorosityPartition.hh"
 #include "TransportDefs.hh"
 #include "TransportDomainFunction.hh"
+#include "EvaluatorPrimaryDomainFunction.hh"
 
 namespace Amanzi {
 namespace Transport {
@@ -431,6 +432,7 @@ class Transport_PK : public PK_Physical {
 
   bool transport_on_manifold_;
   bool subcycling_, use_transport_porosity_, use_effective_diffusion_;
+  bool convert_to_field_;
   int dim;
 
   Teuchos::RCP<AmanziChemistry::Chemistry_PK> chem_pk_;
