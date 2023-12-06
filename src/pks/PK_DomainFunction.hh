@@ -41,6 +41,8 @@ class PK_DomainFunction {
   // model name
   virtual std::string name() const { return "undefined"; }
 
+ 
+
   // access
   // -- volume of the regions
   double domain_volume() { return domain_volume_; }
@@ -59,6 +61,8 @@ class PK_DomainFunction {
   double domain_volume_;
   std::string keyword_;
 };
+
+void copyToCompsiteVector(const PK_DomainFunction & df, CompositeVector & cv);
 
 } // namespace Amanzi
 

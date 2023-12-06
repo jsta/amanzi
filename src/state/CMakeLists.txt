@@ -80,6 +80,7 @@ set(state_inc_files
   evaluators/EvaluatorSecondary.hh
   evaluators/EvaluatorSecondaryMonotype.hh
   evaluators/EvaluatorSecondaryMonotypeFromFunction.hh
+
   IO.hh
   Observable.hh
   StateDefs.hh
